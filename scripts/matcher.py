@@ -30,7 +30,7 @@ class FaceMatcher(scripts.Script):
                     crop_mask = gr.Image(label="Cropped Mask", type='numpy', image_mode="RGB")
                 with gr.Row():
                     mask_invert = gr.Checkbox(label="Mask Invert")
-                    padding = gr.Number(label="Padding", minimum=0, maximum=15, precision=0)
+                    padding = gr.Number(label="Padding", minimum=0, maximum=50, precision=0)
                 with gr.Row():
                     btn = gr.Button(label="Gen")
                     btn.click(self.on_btn_clicked, inputs=[user_image, mask_invert, padding],

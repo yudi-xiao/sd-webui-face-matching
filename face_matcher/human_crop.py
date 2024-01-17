@@ -1,5 +1,5 @@
 import cv2
-from PIL import Image
+from PIL import Image, ImageOps
 from face_matcher.logger import logger
 import mediapipe as mp
 from mediapipe.tasks.python import vision
@@ -28,14 +28,17 @@ class HumanCrop(object):
             # Generate solid color images for showing the output segmentation mask.
             image_data = mp_image.numpy_view()
             fg_image = np.zeros(image_data.shape, dtype=np.uint8)
-            fg_image[:] = BG_COLOR if mask_invert else MASK_COLOR
+            fg_image[:] = MASK_COLOR
             bg_image = np.zeros(image_data.shape, dtype=np.uint8)
-            bg_image[:] = MASK_COLOR if mask_invert else BG_COLOR
+            bg_image[:] = BG_COLOR
             stack = np.stack((category_mask.numpy_view(),) * 3, axis=-1)
             condition_face = stack == category_face
             condition_hair = stack == category_hair
             output_image = np.where(np.logical_or(condition_face, condition_hair), fg_image, bg_image)
             output_image = cv2.erode(output_image, (3, 3), iterations=padding_pixel)
+            if mask_invert:
+                output_image_pil = Image.fromarray(output_image)
+                output_image = np.asarray(ImageOps.invert(output_image_pil))
         return output_image
 
     def get_face_crop(self, image: np.ndarray, resize_width: int):
