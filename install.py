@@ -8,7 +8,9 @@ req_file = os.path.join(os.path.dirname(os.path.realpath(__file__)), "requiremen
 
 models = {
     "models/yolo/selfie_multiclass_256x256.tflite": "https://storage.googleapis.com/mediapipe-models/image_segmenter/selfie_multiclass_256x256/float32/latest/selfie_multiclass_256x256.tflite",
-    "models/yolo/face_yolov8m.pt": "https://huggingface.co/Bingsu/adetailer/resolve/main/face_yolov8m.pt"
+    "models/yolo/face_yolov8m.pt": "https://huggingface.co/Bingsu/adetailer/resolve/main/face_yolov8m.pt",
+    "models/yolo/pose_landmarker_heavy.task": "https://storage.googleapis.com/mediapipe-models/pose_landmarker/pose_landmarker_heavy/float16/latest/pose_landmarker_heavy.task",
+    "models/yolo/blaze_face_short_range.tflite": "https://storage.googleapis.com/mediapipe-models/face_detector/blaze_face_short_range/float16/latest/blaze_face_short_range.tflite"
 }
 
 
