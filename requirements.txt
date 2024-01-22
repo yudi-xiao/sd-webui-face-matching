@@ -1,3 +1,4 @@
 ultralytics==8.0.209
 mediapipe
 opencv-python-headless
+scipy

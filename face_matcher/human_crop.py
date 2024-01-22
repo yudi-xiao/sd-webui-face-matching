@@ -4,6 +4,7 @@ from face_matcher.logger import logger
 import mediapipe as mp
 from mediapipe.tasks.python import vision
 import numpy as np
+from scipy.ndimage import binary_erosion
 
 
 class HumanCrop(object):
@@ -35,11 +36,13 @@ class HumanCrop(object):
             condition_face = stack == category_face
             condition_hair = stack == category_hair
             output_image = np.where(np.logical_or(condition_face, condition_hair), fg_image, bg_image)
-            output_image = cv2.erode(output_image, (3, 3), iterations=padding_pixel)
+            output_image_pil = Image.fromarray(output_image).convert('L')
+            output_image_binary_mask = np.asarray(output_image_pil) > 0
+            output_image = binary_erosion(output_image_binary_mask, iterations=padding_pixel)
+            output_image = Image.fromarray(output_image.astype(np.uint8) * 255, mode='L').convert('RGB')
             if mask_invert:
-                output_image_pil = Image.fromarray(output_image)
-                output_image = np.asarray(ImageOps.invert(output_image_pil))
-        return output_image
+                output_image = ImageOps.invert(output_image)
+        return np.asarray(output_image)
 
     def get_face_crop(self, image: np.ndarray, resize_width: int):
         options = vision.FaceDetectorOptions(
